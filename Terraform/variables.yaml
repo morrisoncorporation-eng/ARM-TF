@@ -1,0 +1,12 @@
+variables:
+
+# general variables
+  - name: agent_pool
+    value: custom_vmss # <--- CHANGE TO YOUR ADO AGENT POOL NAME
+    
+  - name: motsId
+    value: "msft"
+
+# image builder variables ---------------------------------------------------
+  - name: image_builder
+    value: true # <--- OPTIONAL, SET TO ENABLE/DISABLE IMAGE BUILDER TASKS

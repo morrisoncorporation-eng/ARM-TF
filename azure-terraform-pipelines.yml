@@ -1,0 +1,162 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+stages:
+- stage: Development
+  jobs:
+    - job: build
+      pool:
+        vmImage: 'ubuntu-16.04'
+      steps:
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: 'printenv'
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTaskV1@0
+        displayName: 'init'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+          command: 'init'
+          backendServiceArm: 'demoproject-connection'
+          backendAzureRmResourceGroupName: 'newlabrg'
+          backendAzureRmStorageAccountName: 'newlabrgdiag'
+          backendAzureRmContainerName: 'deploy'
+          backendAzureRmKey: 'tf/terraform.tfstate'
+      - task: TerraformTaskV1@0
+        displayName: 'plan'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+          provider: 'azurerm'
+          command: 'plan'
+          backendServiceArm: 'demoproject-connection'
+          backendAzureRmResourceGroupName: 'newlabrg'
+          backendAzureRmStorageAccountName: 'newlabrgdiag'
+          backendAzureRmContainerName: 'deploy'
+          backendAzureRmKey: 'tf/terraform.tfstate'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)"
+      - task: TerraformTaskV1@0
+        displayName: 'apply'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+          command: 'apply'
+          backendAzureRmResourceGroupName: 'newlabrg'
+          backendAzureRmStorageAccountName: 'newlabrgdiag'
+          backendAzureRmContainerName: 'deploy'
+          backendAzureRmKey: 'terraform.tfstate'
+          backendServiceArm: 'demoproject-connection'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)"
+- stage: Production
+  jobs:
+    - job: build
+      pool:
+        vmImage: 'ubuntu-16.04'
+      steps:
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: 'printenv'
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTaskV1@0
+        displayName: 'init'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+          command: 'init'
+          backendServiceArm: 'demoproject-connection'
+          backendAzureRmResourceGroupName: 'newlabrg'
+          backendAzureRmStorageAccountName: 'newlabrgdiag'
+          backendAzureRmContainerName: 'deploy'
+          backendAzureRmKey: 'tf/terraform.tfstate'
+      - task: TerraformTaskV1@0
+        displayName: 'plan'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+          provider: 'azurerm'
+          command: 'plan'
+          backendServiceArm: 'demoproject-connection'
+          backendAzureRmResourceGroupName: 'newlabrg'
+          backendAzureRmStorageAccountName: 'newlabrgdiag'
+          backendAzureRmContainerName: 'deploy'
+          backendAzureRmKey: 'tf/terraform.tfstate'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_prodRG)"
+      - task: TerraformTaskV1@0
+        displayName: 'apply'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+          command: 'apply'
+          backendAzureRmResourceGroupName: 'newlabrg'
+          backendAzureRmStorageAccountName: 'newlabrgdiag'
+          backendAzureRmContainerName: 'deploy'
+          backendAzureRmKey: 'terraform.tfstate'
+          backendServiceArm: 'demoproject-connection'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_prodRG)"
+# - stage: Production
+#   jobs:
+#     - deployment: prod
+#       environment: 'prod'
+#       pool:
+#         vmImage: 'ubuntu-16.04'
+#       strategy:
+#        runOnce:
+#          deploy:
+#           steps:
+#           - task: Bash@3
+#             inputs:
+#               targetType: 'inline'
+#               script: 'printenv'
+#           - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+#             displayName: 'install'
+#             inputs:
+#               terraformVersion: 'latest'
+#           - task: TerraformTaskV1@0
+#             displayName: 'init'
+#             inputs:
+#               workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+#               command: 'init'
+#               backendServiceArm: 'demoproject-connection'
+#               backendAzureRmResourceGroupName: 'newlabrg'
+#               backendAzureRmStorageAccountName: 'newlabrgdiag'
+#               backendAzureRmContainerName: 'deploy'
+#               backendAzureRmKey: 'tf/terraform.tfstate'
+#           - task: TerraformTaskV1@0
+#             displayName: 'plan'
+#             inputs:
+#               workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+#               provider: 'azurerm'
+#               command: 'plan'
+#               backendServiceArm: 'demoproject-connection'
+#               backendAzureRmResourceGroupName: 'newlabrg'
+#               backendAzureRmStorageAccountName: 'newlabrgdiag'
+#               backendAzureRmContainerName: 'deploy'
+#               backendAzureRmKey: 'terraform.tfstate'
+#               environmentServiceNameAzureRM: 'demoproject-connection'
+#               commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)"
+#           - task: TerraformTaskV1@0
+#             displayName: 'apply'
+#             inputs:
+#               workingDirectory: '$(System.DefaultWorkingDirectory)/Demo/Terraform'
+#               provider: 'azurerm'
+#               command: 'apply'
+#               backendAzureRmResourceGroupName: 'newlabrg'
+#               backendAzureRmStorageAccountName: 'newlabrgdiag'
+#               backendAzureRmContainerName: 'deploy'
+#               backendAzureRmKey: 'terraform.tfstate'
+#               backendServiceArm: 'demoproject-connection'
+#               environmentServiceNameAzureRM: 'demoproject-connection'
+#               commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)"
+

@@ -1,0 +1,51 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+
+    pool:
+      vmImage: 'vs2017-win2016'
+
+    steps:    
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(system.DefaultWorkingDirectory)/Demo'
+        Contents: 'ArmTemplates/**'
+        TargetFolder: '$(system.DefaultWorkingDirectory)'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'drop'
+        publishLocation: 'pipeline'
+
+- stage: Release
+  jobs:
+  - job: Release
+  
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        targetPath: '$(System.ArtifactsDirectory)'
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'demoproject-connection'
+        subscriptionId: 'f2aeaccd-73bf-45ef-8603-946e33fa5570'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'morrisonrg'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        deploymentMode: 'Incremental'
+        csmFile: '$(System.ArtifactsDirectory)/s/ArmTemplates/azurevm.json'
+        overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -customscript $(blobsas) -vmName "ismorrisvm"'
