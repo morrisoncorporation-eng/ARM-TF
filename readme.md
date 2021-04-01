@@ -44,7 +44,7 @@ commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(T
 
 **Notice** how "MYSECRET" is in upper cases, all variables stored as "Secret" in Azure pipeline Variables are stored with upper cases and can only be retrieved using the method above. 
 
-##Other Links
+## Other Links
 ### pipeline Variables
 https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml
 
