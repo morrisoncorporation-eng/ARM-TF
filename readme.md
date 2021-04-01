@@ -14,7 +14,7 @@ Use the Azure pipeline variables to set all prerequisites for both ARM templates
 
 Arm templates parameters can be overridden using the section below in the Azure resourcegroup deployment Task.
 ```
-overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -customscript $(blobsas) -vmName "ismorrisvm"'
+overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -customscript $(blobsas) -vmName "arm-vm"'
 
 ```
 
@@ -43,3 +43,16 @@ commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(T
 ```
 
 **Notice** how "MYSECRET" is in upper cases, all variables stored as "Secret" in Azure pipeline Variables are stored with upper cases and can only be retrieved using the method above. 
+
+##Other Links
+### pipeline Variables
+https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml
+
+### Pipeline Copy Task
+https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/copy-files?view=azure-devops&tabs=yaml
+
+### Pipeline Publish Task 
+https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-build-artifacts?view=azure-devops
+
+### ADO Agent Variables
+https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml#agent-variables-devops-services
