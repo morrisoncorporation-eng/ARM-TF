@@ -18,9 +18,9 @@ stages:
     steps:    
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(system.DefaultWorkingDirectory)'
-        Contents: 'ArmTemplates/**'
-        TargetFolder: '$(system.DefaultWorkingDirectory)'
+        SourceFolder: '$(system.DefaultWorkingDirectory)/ArmTemplates'
+        Contents: '**'
+        TargetFolder: '$(system.DefaultWorkingDirectory)/ArmTemplates'
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: '$(Pipeline.Workspace)'
