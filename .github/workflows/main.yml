@@ -1,0 +1,76 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+          creds: 
+          # Set this value to true to enable Azure PowerShell Login in addition to Az CLI login
+          enable-AzPSSession: # optional
+          # Name of the environment. Supported values are azurecloud, azurestack, azureusgovernment, azurechinacloud, azuregermancloud. Default being azurecloud
+          environment: # optional, default is azurecloud
+          # Set this value to true to enable support for accessing tenants without subscriptions
+          allow-no-subscriptions: # optional
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          # Provide the scope of the deployment. Valid values are: 'resourcegroup', 'managementgroup', 'subscription'
+          scope: 'resourcegroup'
+          # Override the Subscription Id set by Azure Login.
+          subscriptionId: # optional
+          # Specify the Id for the Management Group, only required for Management Group Deployments.
+          managementGroupId: # optional
+          # Provide the target region, only required for management Group or Subscription deployments.
+          region: # optional
+          # Provide the name of a resource group, only required for resource Group deployments.
+          resourceGroupName: 'DefaultResourceGroup-EUS2'
+          # Specify the path or URL to the Azure Resource Manager template.
+          template: 'ARM-TF/ArmTemplates/kv-app.json'
+          # Incremental (only add resources to resource group) or Complete (remove extra resources from resource group) or Validate (only validates the template).
+          deploymentMode: # optional
+          # Specifies the name of the resource group deployment to create.
+          deploymentName: 'testgithubaction'
+          # Supply deployment parameter values.
+          parameters: # optional
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          echo test, and deploy your project.
