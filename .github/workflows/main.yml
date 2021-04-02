@@ -36,13 +36,13 @@ jobs:
           scope: resourcegroup
           # Override the Subscription Id set by Azure Login.
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: 'DefaultResourceGroup-EUS2'
+          resourceGroupName: DefaultResourceGroup-EUS2
           # Specify the path or URL to the Azure Resource Manager template.
-          template: 'ArmTemplates/kv-app.json'
+          template: ArmTemplates/kv-app.json
           # Incremental (only add resources to resource group) or Complete (remove extra resources from resource group) or Validate (only validates the template).
           deploymentMode: incremental
           # Specifies the name of the resource group deployment to create.
-          deploymentName: 'testgithubaction'
+          deploymentName: testgithubaction
           # Supply deployment parameter values.
           parameters: # optional
           
