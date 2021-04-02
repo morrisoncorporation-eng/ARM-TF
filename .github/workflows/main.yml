@@ -45,21 +45,3 @@ jobs:
           deploymentName: testgithubaction
           # Supply deployment parameter values.
           parameters: # optional
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          echo test, and deploy your project.
