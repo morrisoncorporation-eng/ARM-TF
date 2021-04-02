@@ -18,7 +18,7 @@ stages:
     steps:    
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(system.DefaultWorkingDirectory)/Demo'
+        SourceFolder: '$(system.DefaultWorkingDirectory)/ARM-TF'
         Contents: 'ArmTemplates/**'
         TargetFolder: '$(system.DefaultWorkingDirectory)'
     - task: PublishPipelineArtifact@1
