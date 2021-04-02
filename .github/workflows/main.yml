@@ -36,7 +36,7 @@ jobs:
           scope: resourcegroup
           # Override the Subscription Id set by Azure Login.
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: 'FIscalRG'
+          resourceGroupName: ${{ secrets.AZURE_RG }}
           # Specify the path or URL to the Azure Resource Manager template.
           template: ArmTemplates/kv-app.json
           # Incremental (only add resources to resource group) or Complete (remove extra resources from resource group) or Validate (only validates the template).
