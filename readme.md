@@ -16,6 +16,7 @@ Arm templates parameters can be overridden using the section below in the Azure 
 ```
 overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -customscript $(blobsas) -vmName "arm-vm"'
 
+
 ```
 
 
@@ -39,7 +40,7 @@ Use the Azure pipeline variables in to set all prerequisites for both ARM templa
 
 Terraform Variables can be parsed using the command options using the Terraform Task in Yaml as below; 
 ```
-commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_prodRG)"
+commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_prodRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)
 ```
 
 **Notice** how "MYSECRET" is in upper cases, all variables stored as "Secret" in Azure pipeline Variables are stored with upper cases and can only be retrieved using the method above. 
