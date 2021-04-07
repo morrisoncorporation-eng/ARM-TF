@@ -43,7 +43,7 @@ stages:
         azureResourceManagerConnection: 'demoproject-connection'
         subscriptionId: 'f2aeaccd-73bf-45ef-8603-946e33fa5570'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'morrisonrg'
+        resourceGroupName: '$(resourcegroupname)'
         location: 'East US'
         templateLocation: 'Linked artifact'
         deploymentMode: 'Incremental'
