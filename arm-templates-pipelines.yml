@@ -48,4 +48,4 @@ stages:
         templateLocation: 'Linked artifact'
         deploymentMode: 'Incremental'
         csmFile: '$(System.ArtifactsDirectory)/s/ArmTemplates/azurevm.json'
-        overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -customscript $(blobsas) -vmName "ismorrisvm"'
+        overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -customscript $(blobsas) -vmName "ARM-Testvm"'
