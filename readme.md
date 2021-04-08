@@ -57,3 +57,6 @@ https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-bu
 
 ### ADO Agent Variables
 https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml#agent-variables-devops-services
+
+### GitHub WorkFLows
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-github-actions#create-workflow
