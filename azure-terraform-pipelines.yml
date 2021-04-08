@@ -49,6 +49,7 @@ stages:
           backendServiceArm: 'demoproject-connection'
           environmentServiceNameAzureRM: 'demoproject-connection'
           commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
+
 - stage: Production
   jobs:
     - job: prod
