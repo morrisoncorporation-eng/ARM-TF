@@ -32,7 +32,7 @@ overrideParameters: '-adminUsername "$(vmuser)" -adminPassword $(vmpassword) -cu
    - SAS Token for Custom Script file in Azure Storage Account
    - VM Password
    - Service Connection from ADO to Azure Subscription
-   - Storage Account Name and Container for State file
+   - Existing Storage Account Name and Container for State file
    - Resource Group Name for Storage Account
  
 ## Deployment 
