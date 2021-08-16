@@ -41,7 +41,7 @@ stages:
       inputs:
         deploymentScope: 'Resource Group'
         azureResourceManagerConnection: 'demoproject-connection'
-        subscriptionId: 'f2aeaccd-73bf-45ef-8603-946e33fa5570'
+        subscriptionId: '000000-000-000f-82343-2353647'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(resourcegroupname)'
         location: 'East US'
