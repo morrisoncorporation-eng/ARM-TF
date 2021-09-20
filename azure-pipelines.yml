@@ -26,7 +26,7 @@ stages:
         inputs:
           workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
           command: 'init'
-          backendServiceArm: 'demoproject-connection'
+          backendServiceArm: 'Visual Studio Enterprise(2b2f75e7-cab8-43e0-ac6c-e46e6fc8f7cd)'
           backendAzureRmResourceGroupName: '$(TF_VAR_StorageRG)'
           backendAzureRmStorageAccountName: '$(TF_VAR_bakendStorageName)'
           backendAzureRmContainerName: '$(TF_VAR_backend_container)'
@@ -38,16 +38,16 @@ stages:
           workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
           provider: 'azurerm'
           command: 'plan'
-          backendServiceArm: 'demoproject-connection'
-          environmentServiceNameAzureRM: 'demoproject-connection'
+          backendServiceArm: 'Visual Studio Enterprise(2b2f75e7-cab8-43e0-ac6c-e46e6fc8f7cd)'
+          environmentServiceNameAzureRM: 'Visual Studio Enterprise(2b2f75e7-cab8-43e0-ac6c-e46e6fc8f7cd)'
           commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
       - task: TerraformTaskV1@0
         displayName: 'apply'
         inputs:
           workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
           command: 'apply'
-          backendServiceArm: 'demoproject-connection'
-          environmentServiceNameAzureRM: 'demoproject-connection'
+          backendServiceArm: 'Visual Studio Enterprise(2b2f75e7-cab8-43e0-ac6c-e46e6fc8f7cd)'
+          environmentServiceNameAzureRM: 'Visual Studio Enterprise(2b2f75e7-cab8-43e0-ac6c-e46e6fc8f7cd)'
           commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
 
 - stage: Production
