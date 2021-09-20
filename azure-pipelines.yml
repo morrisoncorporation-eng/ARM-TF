@@ -6,26 +6,89 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+- stage: Development
+  jobs:
+    - job: dev
+      pool:
+        vmImage: 'ubuntu-16.04'
+      steps:
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: 'printenv'
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTaskV1@0
+        displayName: 'init'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+          command: 'init'
+          backendServiceArm: 'demoproject-connection'
+          backendAzureRmResourceGroupName: '$(TF_VAR_StorageRG)'
+          backendAzureRmStorageAccountName: '$(TF_VAR_bakendStorageName)'
+          backendAzureRmContainerName: '$(TF_VAR_backend_container)'
+          backendAzureRmKey: 'tf/terraform.tfstate'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+      - task: TerraformTaskV1@0
+        displayName: 'plan'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+          provider: 'azurerm'
+          command: 'plan'
+          backendServiceArm: 'demoproject-connection'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
+      - task: TerraformTaskV1@0
+        displayName: 'apply'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+          command: 'apply'
+          backendServiceArm: 'demoproject-connection'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_devRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- stage: Production
+  jobs:
+    - job: prod
+      pool:
+        vmImage: 'ubuntu-16.04'
+      steps:
+      - task: Bash@3
+        inputs:
+          targetType: 'inline'
+          script: 'printenv'
+      - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTaskV1@0
+        displayName: 'init'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+          command: 'init'
+          backendServiceArm: 'demoproject-connection'
+          backendAzureRmResourceGroupName: '$(TF_VAR_StorageRG)'
+          backendAzureRmStorageAccountName: '$(TF_VAR_bakendStorageName)'
+          backendAzureRmContainerName: '$(TF_VAR_backend_container)'
+          backendAzureRmKey: 'tf/terraform.tfstate'
+      - task: TerraformTaskV1@0
+        displayName: 'plan'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+          provider: 'azurerm'
+          command: 'plan'
+          backendServiceArm: 'demoproject-connection'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_prodRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
+      - task: TerraformTaskV1@0
+        displayName: 'apply'
+        inputs:
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+          command: 'apply'
+          backendServiceArm: 'demoproject-connection'
+          environmentServiceNameAzureRM: 'demoproject-connection'
+          commandOptions: -input=false -var "MYSECRET=$(TF_VAR_mysecret)" -var "rgname=$(TF_VAR_prodRG)" -var "bakendStorageName=$(TF_VAR_bakendStorageName)" -var "backend_container=$(TF_VAR_backend_container)" -var "StorageRG=$(TF_VAR_StorageRG)"
 
- # information about pipelne
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(agent.builddirectory)'
-    Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
